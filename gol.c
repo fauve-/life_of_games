@@ -3,6 +3,22 @@
 #include <time.h>
 #include <string.h>
 /*
+  The overall plan is to keep each row in a 32-bit bitfield, and then
+  run over each bit with a mask to check the neighbors , counting up
+  the set bits to generate their score
+  
+  One interesting problem was to keep the board you're checking
+  seperated from the screen you're writing on. To do that, I allocated
+  twice as much memory for the board. 
+
+  The print just iterates over the bits to check out if its set, and
+  from that, decides what to lay down. It does that for the whole
+  row, and then spits out that row.
+
+  To generate the world, it's simply allocated, and then a random
+  number modulous the (whole number) probability of life existing on
+  that square. 
+  
  */
 
 
@@ -55,8 +71,8 @@ unsigned int * turn(unsigned int* world, int side){
   return world;
 }
 
-  const char alive = '#';
-  const char dead = '.';
+const char alive = '#';
+const char dead = '.';
 
 void printIt(unsigned int *world, int side){
   int i,j;
@@ -109,8 +125,7 @@ void gameloop(unsigned int *world, int duration){
   for(i = 0; i < duration; i++){
     world = turn(world, i % 2);
     printIt(world, (i + 1) %2);
-  }
-
+  }  
 }
 
 
